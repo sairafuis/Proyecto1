@@ -49,6 +49,14 @@ class Grafo(Nodo,Vertice):
 					liga.append(g.crearConexion((x,x+col)))
 				x += 1
 		return liga
+	
+#Metodo para calcular cantidad de nodos
+	def calcularNodos(self,verticesList):
+		nodos = set()
+		for i in verticesList:
+			nodos.add(i.idConexion[1])
+			nodos.add(i.idConexion[0])
+		return len(nodos)
 
 #Metodo para salvar el grafo
 	def saveGraph(self,graph):
@@ -58,6 +66,7 @@ class Grafo(Nodo,Vertice):
    				f.write(str(i.idConexion[0]) + " -- " + str(i.idConexion[1]) + "\n")
    			f.write("}")
 		f.close()
+
 
 #Metodo para generar grafo de erdos
 	def erdosRenyi(self,nodos,vertices):
@@ -190,7 +199,98 @@ class Grafo(Nodo,Vertice):
 			verticesList.append(Grafo(False).crearConexion((i,verticesList[tiro2].idConexion[0])))
 			verticesList.append(Grafo(False).crearConexion((i,verticesList[tiro2].idConexion[1])))
 		return verticesList
+	
+#Metodo para calcula el BFS
+	def BFS(self,fuente,verticesList):
+		Descubierto = []
+		Layers = []
+		verticesNew =[]
+		fuentes = []
+		revisados = []
+		fuentes.append(fuente)
+		revisados.append(fuente)
+		nodosExtension = Grafo(False).calcularNodos(verticesList)
+		for i in range(0,nodosExtension):
+			Descubierto.append(False)
+		contadorLayer = 0
+		Layers.append(fuentes)
+		while len(Layers[contadorLayer]) >> 0:
+			currentV = [] 
+			for nodo in Layers[contadorLayer]:
+				if Descubierto[nodo-1] == False:
+					Descubierto[nodo-1] = True
+					for l in verticesList:
+						if nodo == l.idConexion[0] and (Descubierto[l.idConexion[1]-1]==False) and (l.idConexion[1]) not in revisados:
+							currentV.append(l.idConexion[1])
+							revisados.append(l.idConexion[1])
+							verticesNew.append(l)
+						elif nodo == l.idConexion[1] and Descubierto[l.idConexion[0]-1]==False and (l.idConexion[0]) not in revisados:
+							currentV.append(l.idConexion[0])
+							revisados.append(l.idConexion[0])
+							verticesNew.append(l)
+			contadorLayer += 1
+			Layers.append(currentV)
+		return verticesNew
 
-
-ga1 = Grafo(False).dorogov(500)
-Grafo(False).saveGraph(ga1)
+#Metodo para calcular el DFS recursivo
+	def DFSRecursive(self,fuente,verticesList,revisado,a):
+		revisado.add(fuente)
+		adyacentes = []
+		currentContado = 0
+		for i in verticesList:
+			if i.idConexion[0] == fuente or i.idConexion[1] == fuente:
+				adyacentes.append(i)
+		for j in adyacentes:
+			if (j.idConexion[0] not in revisado or j.idConexion[1] not in revisado) and currentContado != len(adyacentes):
+				a.append(j)
+				verticesList.remove(j)
+				if j.idConexion[0] not in revisado:
+					b = Grafo(False).DFSRecursive(j.idConexion[0],verticesList,revisado,a)
+				elif j.idConexion[1] not in revisado:
+					b = Grafo(False).DFSRecursive(j.idConexion[1],verticesList,revisado,a)
+				currentContado += 1
+		return a
+			
+#Metodo para calcular el DFS iterativo
+	def DFSIterative(self,fuente,verticesList):
+		revisado = []
+		pila = []
+		vertices = []
+		vNew = verticesList.copy()
+		extension = Grafo(False).calcularNodos(verticesList)
+		pila.append(fuente)
+		ultimo = None
+		while len(pila):
+			fuenteb = 0
+			vertices.append(ultimo)
+			ultimo = None
+			fuente = pila.pop()
+			if fuente not in revisado:
+				revisado.append(fuente)
+				for i in verticesList:
+					if i.idConexion[0] == fuente and i.idConexion[1] not in revisado:
+						pila.append(i.idConexion[1])
+						ultimo= i
+						fuenteb = 1
+					elif i.idConexion[1] == fuente and i.idConexion[0] not in revisado:
+						pila.append(i.idConexion[0])
+						ultimo= i
+						fuenteb = 1 
+		new = []
+		for i in range(len(revisado)-1,-1,-1):
+			flag = 0
+			for j in range(i-1,-1,-1):
+				for n in verticesList:
+					if n.idConexion[0] == revisado[i] and n.idConexion[1] == revisado[j]:
+						new.append(n)
+						flag = 1
+						break
+					elif n.idConexion[1] == revisado[i] and n.idConexion[0] == revisado[j]:
+						new.append(n)
+						flag = 1
+						break
+				if flag == 1:
+					break
+		return new
+			
+		
