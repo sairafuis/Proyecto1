@@ -1,0 +1,27 @@
+graph x {
+1 -- 6[label=96];
+2 -- 7[label=81];
+2 -- 9[label=78];
+3 -- 2[label=13];
+3 -- 6[label=79];
+3 -- 10[label=9];
+4 -- 1[label=7];
+4 -- 2[label=66];
+5 -- 4[label=49];
+5 -- 7[label=19];
+6 -- 4[label=39];
+6 -- 10[label=99];
+7 -- 1[label=81];
+7 -- 3[label=2];
+7 -- 4[label=29];
+8 -- 1[label=27];
+8 -- 2[label=26];
+8 -- 5[label=34];
+8 -- 6[label=79];
+9 -- 1[label=85];
+9 -- 3[label=18];
+9 -- 5[label=40];
+9 -- 7[label=98];
+9 -- 8[label=10];
+10 -- 8[label=89];
+}
