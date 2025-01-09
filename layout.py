@@ -21,7 +21,11 @@ MIN_DISTANCIA = 5  # Evitar explosiones por nodos demasiado cercanos
 THETA = 0.5  # Parámetro de apertura para Barnes-Hut
 
 # Generar grafo utilizando el modelo deseado
-aristas = gra.Grafo(False).grafoMalla(10,10)
+#aristas = gra.Grafo(False).grafoMalla(25,25)
+#aristas = gra.Grafo(False).dorogov(500)
+#aristas = gra.Grafo(False).barasi(500,5)
+#aristas = gra.Grafo(False).geografica(200,.3)
+aristas = gra.Grafo(False).erdosRenyi(500,3500)
 
 # Extraer nodos y aristas del grafo
 #nodos = {nodo.id: [random.randint(10, ANCHO - 10), random.randint(10, ALTO - 10)] for nodo in grafo.nodos}
